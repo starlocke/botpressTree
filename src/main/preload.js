@@ -2,6 +2,9 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
+    getPaths() {
+      ipcRenderer.send('get-paths', process.env.PATHS);
+    },
     myPing() {
       ipcRenderer.send('ipc-example', 'ping');
     },

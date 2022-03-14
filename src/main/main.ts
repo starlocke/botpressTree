@@ -31,6 +31,12 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
+ipcMain.on('get-paths', async (event, arg) => {
+  const msgTemplate = (pingPong: string) => `get-paths: ${pingPong}`;
+  console.log(msgTemplate(arg));
+  event.reply('get-paths', msgTemplate('pong'));
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
