@@ -1,6 +1,6 @@
 {
-  "name": "electron-react-boilerplate",
-  "description": "A foundation for scalable desktop apps",
+  "name": "botpressTree",
+  "description": "botpressTree: a rapidly slapped-together fileTree integration",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
@@ -89,20 +89,25 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "starlocke",
+      "repo": "botpressTree"
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
+    "url": "git+https://github.com/starlocke/botpressTree.git"
   },
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
+    "name": "Victor Yap",
+    "email": "sir.victor.yap@gmail.com",
+    "url": "https://blog.cul-de-sac.ca"
   },
   "contributors": [
+    {
+      "name": "Electron React Boilerplate Maintainers",
+      "email": "electronreactboilerplate@gmail.com",
+      "url": "https://electron-react-boilerplate.js.org"  
+    },
     {
       "name": "Amila Welihinda",
       "email": "amilajack@gmail.com",
@@ -116,7 +121,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
+    "url": "https://github.com/starlocke/botpressTree/issues"
   },
   "keywords": [
     "electron",
@@ -129,7 +134,7 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
+  "homepage": "https://github.com/starlocke/botpressTree",
   "jest": {
     "testURL": "http://localhost/",
     "testEnvironment": "jsdom",
