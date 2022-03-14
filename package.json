@@ -106,7 +106,7 @@
     {
       "name": "Electron React Boilerplate Maintainers",
       "email": "electronreactboilerplate@gmail.com",
-      "url": "https://electron-react-boilerplate.js.org"  
+      "url": "https://electron-react-boilerplate.js.org"
     },
     {
       "name": "Amila Welihinda",
@@ -231,12 +231,15 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "bootstrap": "5.1.3",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.4",
     "electron-updater": "^4.6.5",
     "history": "^5.2.0",
     "react": "^17.0.2",
+    "react-bootstrap": "^2.2.1",
     "react-dom": "^17.0.2",
+    "react-folder-tree": "^5.0.3",
     "react-router-dom": "^6.2.1"
   },
   "devEngines": {
