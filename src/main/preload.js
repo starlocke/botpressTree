@@ -4,6 +4,24 @@ contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
     getPaths() {
       ipcRenderer.send('get-paths', process.env.PATHS);
+      // console.log(process.env.PATHS);
+
+      if (typeof process.env.PATHS !== 'undefined') {
+        const paths = process.env.PATHS.split(';');
+        // console.log(paths);
+        return paths;
+      }
+
+      return null;
+    },
+    getTree(path) {
+      return {
+        name: path,
+        children: [
+          { name: 'Foo.txt' },
+          { name: 'Bar-Folder', children: [{ name: 'Bar.txt' }] },
+        ],
+      };
     },
     myPing() {
       ipcRenderer.send('ipc-example', 'ping');

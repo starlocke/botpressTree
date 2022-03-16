@@ -33,8 +33,9 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 ipcMain.on('get-paths', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `get-paths: ${pingPong}`;
+  console.log('foobar?');
   console.log(msgTemplate(arg));
-  event.reply('get-paths', msgTemplate('pong'));
+  event.reply('get-paths', msgTemplate(arg));
 });
 
 if (process.env.NODE_ENV === 'production') {
