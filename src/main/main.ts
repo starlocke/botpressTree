@@ -31,11 +31,20 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
+// server-side
 ipcMain.on('get-paths', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `get-paths: ${pingPong}`;
-  console.log('foobar?');
+  console.log('get-paths, server-side');
   console.log(msgTemplate(arg));
   event.reply('get-paths', msgTemplate(arg));
+});
+
+// server-side
+ipcMain.on('get-tree', async (event, arg) => {
+  const msgTemplate = (pingPong: string) => `get-tree: ${pingPong}`;
+  console.log('get-tree, server-side');
+  console.log(msgTemplate(arg));
+  event.reply('get-tree', msgTemplate(arg));
 });
 
 if (process.env.NODE_ENV === 'production') {

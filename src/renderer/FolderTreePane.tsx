@@ -21,5 +21,9 @@ export default function FolderTreePane() {
     }
     getPaths();
   }, []);
+  window.electron.ipcRenderer.on('get-paths', (arg) => {
+    console.log('FolderTreePane (get-paths)...');
+    console.log(arg);
+  });
   return <Accordion className="FolderTreePane">{items}</Accordion>;
 }

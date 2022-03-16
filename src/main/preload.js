@@ -3,7 +3,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
     getPaths() {
-      ipcRenderer.send('get-paths', process.env.PATHS);
+      ipcRenderer.send('get-paths', process.env.PATHS); // handled by: main.ts
       // console.log(process.env.PATHS);
 
       if (typeof process.env.PATHS !== 'undefined') {
@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld('electron', {
       return null;
     },
     getTree(path) {
+      ipcRenderer.send('get-tree', path); // handled by: main.ts
       return {
         name: path,
         children: [
@@ -27,7 +28,12 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.send('ipc-example', 'ping');
     },
     on(channel, func) {
-      const validChannels = ['ipc-example'];
+      const validChannels = [
+        'ipc-example',
+        'get-paths',
+        'get-tree',
+        'update-tree',
+      ];
       if (validChannels.includes(channel)) {
         // Deliberately strip event as it includes `sender`
         ipcRenderer.on(channel, (event, ...args) => func(...args));

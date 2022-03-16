@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import FolderTree from 'react-folder-tree';
 import PropTypes from 'prop-types';
 import 'react-folder-tree/dist/style.css';
@@ -5,11 +6,19 @@ import './FolderTreeBasic.css';
 
 export default function FolderTreeBasic(props) {
   const { path } = props;
+  const [tree, setTree] = useState({});
+
   const onTreeStateChange = (state: any, event: any) => {
     // console.log(state, event);
   };
 
-  const tree = window.electron.ipcRenderer.getTree(path);
+  useEffect(() => {
+    async function getTree(targetPath) {
+      const t = await window.electron.ipcRenderer.getTree(targetPath);
+      setTree(t);
+    }
+    getTree(path);
+  }, [path]);
 
   // console.log('test-data...');
   // console.log(testData);
@@ -21,6 +30,10 @@ export default function FolderTreeBasic(props) {
       {name: "Bar-Folder", children: [{name: "Bar.txt"}]}
     ]}
   */
+  window.electron.ipcRenderer.on('get-tree', (arg) => {
+    console.log('FolderTreeBasic (get-tree)...');
+    console.log(arg);
+  });
 
   return (
     <div>
