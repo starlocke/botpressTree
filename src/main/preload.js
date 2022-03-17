@@ -16,13 +16,6 @@ contextBridge.exposeInMainWorld('electron', {
     },
     getTree(path) {
       ipcRenderer.send('get-tree', path); // handled by: main.ts
-      return {
-        name: path,
-        children: [
-          { name: 'Foo.txt' },
-          { name: 'Bar-Folder', children: [{ name: 'Bar.txt' }] },
-        ],
-      };
     },
     myPing() {
       ipcRenderer.send('ipc-example', 'ping');
@@ -40,7 +33,12 @@ contextBridge.exposeInMainWorld('electron', {
       }
     },
     once(channel, func) {
-      const validChannels = ['ipc-example'];
+      const validChannels = [
+        'ipc-example',
+        'get-paths',
+        'get-tree',
+        'update-tree',
+      ];
       if (validChannels.includes(channel)) {
         // Deliberately strip event as it includes `sender`
         ipcRenderer.once(channel, (event, ...args) => func(...args));

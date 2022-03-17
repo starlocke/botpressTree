@@ -12,8 +12,11 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import chokidar from 'chokidar';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+
+const dirTree = require('directory-tree');
 
 export default class AppUpdater {
   constructor() {
@@ -34,17 +37,42 @@ ipcMain.on('ipc-example', async (event, arg) => {
 // server-side
 ipcMain.on('get-paths', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `get-paths: ${pingPong}`;
-  console.log('get-paths, server-side');
-  console.log(msgTemplate(arg));
   event.reply('get-paths', msgTemplate(arg));
 });
 
 // server-side
+interface FixerUpper {
+  name: string;
+  path?: string;
+  children?: FixerUpper[];
+}
+const watchedRoots: string[] = [];
+function fix(elem: FixerUpper) {
+  if (elem.path) {
+    delete elem.path;
+  }
+  if (elem.children) {
+    elem.children.forEach(fix);
+  }
+}
 ipcMain.on('get-tree', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `get-tree: ${pingPong}`;
-  console.log('get-tree, server-side');
-  console.log(msgTemplate(arg));
-  event.reply('get-tree', msgTemplate(arg));
+  const dt = dirTree(arg);
+  fix(dt);
+  event.reply('get-tree', { root: arg, tree: dt });
+
+  if (!watchedRoots.includes(arg)) {
+    watchedRoots.push(arg);
+    const watcher = chokidar.watch(arg, {
+      persistent: true,
+    });
+    watcher.on('ready', async () => {
+      watcher.on('all', (/* watchEvent, watchPath */) => {
+        const dt2 = dirTree(arg);
+        fix(dt2);
+        event.reply('get-tree', { root: arg, tree: dt2 });
+      });
+    });
+  }
 });
 
 if (process.env.NODE_ENV === 'production') {

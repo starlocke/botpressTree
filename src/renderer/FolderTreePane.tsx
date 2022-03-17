@@ -7,23 +7,21 @@ export default function FolderTreePane() {
   useEffect(() => {
     async function getPaths() {
       const paths = await window.electron.ipcRenderer.getPaths();
-      const itemsCollection = paths.map((path: string) => (
-        <Accordion.Item>
-          <Accordion.Header>{path}</Accordion.Header>
-          <Accordion.Body>
-            <div style={{ maxHeight: '800px', overflow: 'scroll' }}>
-              <FolderTreeBasic path={path} />
-            </div>
-          </Accordion.Body>
-        </Accordion.Item>
-      ));
+      const itemsCollection = paths.map((path: string) => {
+        return (
+          <Accordion.Item key={path} eventKey={path}>
+            <Accordion.Header>{path}</Accordion.Header>
+            <Accordion.Body>
+              <div style={{ maxHeight: '800px', overflow: 'scroll' }}>
+                <FolderTreeBasic path={path} />
+              </div>
+            </Accordion.Body>
+          </Accordion.Item>
+        );
+      });
       setItems(itemsCollection);
     }
     getPaths();
   }, []);
-  window.electron.ipcRenderer.on('get-paths', (arg) => {
-    console.log('FolderTreePane (get-paths)...');
-    console.log(arg);
-  });
   return <Accordion className="FolderTreePane">{items}</Accordion>;
 }
