@@ -71,6 +71,55 @@ To bridge the security-context gap, Electon's
 `get-paths` and `get-tree` IPC functions/messages do the work. `chokidar` events
 continuously refresh state, reactively, on the `get-tree` communication channel.
 
+**edge cases**
+
+There are two particularly special situations:
+
+- a given directory does not yet exist
+- a given directory stops existing
+
+In those two cases, the application will render "Status: 404 - Not Found"
+instead of a tree-view. When the given directory exists once again, then,
+it will be detected and its contents refreshed/rendered as a tree-view anew.
+
+Another special case is:
+
+- Rapidly deleted/re-created directories/files
+
+These present challenges to the file system watcher (chokidar) if operations
+are done in very rapid succession. In order to provide one layer of fallback,
+an extra `setTimeout` re-evaluation of the contents of each given directory
+is used, with a delay of 2.5 seconds, which should be sufficient time on
+modern SSD-based compute platforms for the vast majority of such second-chance
+updates to smooth-over small bursts that cannot be caught by the file system
+watcher systems the first time around. Very rarely, or, under extreme situations,
+there is a risk of "oh, the watcher and second-chance updater failed to refresh".
+Sometimes, it may be possible that: letting things "settle down" (ie: stop all
+the intense file system operations) and then doing one more small change to
+a directory of interest -- is enough to trigger a proper refresh.
+
+A "refresh" button may also be warranted to help with addressing such rare
+circumstances.
+
+The "View -> Reload" (menu) function might also be useful in such cases.
+
+**UX design considerations**
+
+As stated previously, only very rough "design" choices were supplied for this
+solution. An extremely constrained "300px" height limit is used to keep things
+from getting too tall and out of hand. It is expected that only a handful
+of directories will be watched. No provisions were made for watching several
+dozen directories -- they would simply overflow, onrestricted in their vertical
+growth. This is a limitation of "separation of concerns", carving away UX
+worries in order to focus on functional aspects at the core the challenge.
+
+It is presumed that more work will be done in the future to further refine the
+"component" when it has more mature UX context of operation and only then shall
+I be more interested in fine-tuned handling of width / height / overflow concerns.
+
+For now, the file explorer component merely "floats" roughly to the left of the
+placeholder "logo + title" section.
+
 **more details in code comments, sparsely**
 
 In a few places within the "newly written code" that I've produced (you can inspect
