@@ -53,7 +53,7 @@ Especially important to note:
 - tree-view is mandated
 - should be rendered in a browser
 - should be launched via command line prompt
-- should be a 4-5 hour solution
+- should be a 4-5 hour solution? or was that supposed to be days?
 
 Some assumptions taken for granted to simply the problem-space:
 
