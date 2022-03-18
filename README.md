@@ -57,7 +57,7 @@ Especially important to note:
 
 Some assumptions taken for granted to simply the problem-space:
 
-- the ONLY interactions of concern are are modifications at the filesystem level;
+- the ONLY interactions of concern are modifications at the filesystem level;
   put another way, for the sake of simplicity, this file-explorer will not need to
   feature manipulations -- it may be read-only; this saves me from having to write
   tons of hooks/handlers and reduces the scope of the time investment needed
@@ -75,28 +75,28 @@ The focus here shall primarily be:
 
 👉 **key components of proposed solution**
 
-To fulfil the "in a browser" requirement simultaneously with "is an application",
-I've opted to start with `electron-react-boilerplate`. I assume that it is clear
-to the reader how "electron" technically provides a Chromium-based web browser.
+- To fulfill the "in a browser" requirement simultaneously with "is an application",
+  I've opted to start with `electron-react-boilerplate`. I assume that it is clear
+  to the reader how "electron" technically provides a Chromium-based web browser.
 
-To fulfill the "multiple collapsible sections" requirement, I employed
-`react-bootstrap` [npm page](https://www.npmjs.com/package/react-bootstrap).
-Specifically, I used its `Accordion` component
-[doc/guide here](https://getbootstrap.com/docs/5.0/components/accordion/).
+- To fulfill the "multiple collapsible sections" requirement, I employed
+  `react-bootstrap` [npm page](https://www.npmjs.com/package/react-bootstrap).
+  Specifically, I used its `Accordion` component
+  [doc/guide here](https://getbootstrap.com/docs/5.0/components/accordion/).
 
-To fulfill the "file explorer" tree-view, I selected `react-folder-tree`
-[npm page](https://www.npmjs.com/package/react-folder-tree).
+- To fulfill the "file explorer" tree-view, I selected `react-folder-tree`
+  [npm page](https://www.npmjs.com/package/react-folder-tree).
 
-To supply `react-folder-tree` with an appropriate data-structure, I employed `directory-tree`
-[npm page](https://www.npmjs.com/package/directory-tree).
+- To supply `react-folder-tree` with an appropriate data-structure, I employed `directory-tree`
+  [npm page](https://www.npmjs.com/package/directory-tree).
 
-To watch the file system for changes, I opted for `chokidar`
-[npm page](https://www.npmjs.com/package/chokidar).
+- To watch the file system for changes, I opted for `chokidar`
+  [npm page](https://www.npmjs.com/package/chokidar).
 
-To bridge the security-context gap, Electon's
-[IPC system](https://www.electronjs.org/docs/latest/tutorial/ipc) was used.
-`get-paths` and `get-tree` IPC functions/messages do the work. `chokidar` events
-continuously refresh state, reactively, on the `get-tree` communication channel.
+- To bridge the security-context gap, Electon's
+  [IPC system](https://www.electronjs.org/docs/latest/tutorial/ipc) was used.
+  `get-paths` and `get-tree` IPC functions/messages do the work. `chokidar` events
+  continuously refresh state, reactively, on the `get-tree` communication channel.
 
 👉 **edge cases**
 
