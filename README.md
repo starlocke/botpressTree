@@ -84,13 +84,30 @@ for the next maintainer. The point here is that such high level documentation
 would be made in a more formal setting. Here, as a "getting a job" pitch, I shall
 refrain from doing so.
 
-**advanced apologies to purists**
+**apologies, in advance, to the purists**
 
 There are some aspects of the code that I would qualify as "awkward". Sorry.
 I'd love to discuss/debate those points in order to imporve on them. For instance:
 `import` vs `require`. For now, things are working as-is so I won't go around
 trying to "fix it" following the "if it ain't broken, don't fix it" principle.
 Worth reworking for standardization purposes, but not for functional purposes.
+
+**system requirements**
+
+This solution has been developed on Windows 10. In theory, it should work just
+fine on Linux and on MacOS systems, too.
+
+Software packages employed:
+
+- nodeJS v16.10.0
+- npm v7.24.0
+- yarn v1.22.11
+
+Please try to match those for compatibility purposes. I'd offer you a containerized
+development, testing, and build solution, but that's very much outside the scope
+of the immediate problem statement.
+
+This solution is meant to be driven using `yarn` instead of `npm`, by the way.
 
 ## Explanations -- dev mode
 
@@ -117,17 +134,33 @@ rm -rf /c/baz
 mkdir -p /c/baz/baz/baz
 ```
 
+It's challenging to do `argv` parameters within a development context, and thus, `PATHS` is employed
+as a close-enough proxy for them.
+
+**NOTICE**: the `:` (colon) character is used to separate paths; but, it may not work outside of Windows
+due to the special way paths are "handled" with automatic subsitutions on that platform. On Windows,
+the `:` (colon) are transformed to `;` (semi-colon) and that's the ultimate "split" character when
+the program evalutes how to interpret multiple paths from the `PATHS` environment variable.
+
 ## Explanations -- production mode
 
 If you "package" the application (see above) and install it on your computer, then you can operate the application
-in full production mode. The main point is that this mode is capable of handling `argv` parameters as
+in full production mode. You'll need to fulfill all the system requirements of being able to develop/build on your host
+system, too -- often extra burdensome on MacOS, for instance (e.g. XCode et al).
+
+The main point is that this mode is capable of handling `argv` parameters as
 required by the problem statement. I trust that the reader is sufficiently well-versed in handling
 their own operating system and would not need extremely detailed step-by-step instructions on how to go
 about executing an application via command-line.
 
-This is an example from within "git-bash" on Windows:
+The installer file(s) are created under the directory `release/build`.
+
+This is an example execution from within "git-bash" on Windows, after running the installer.
+`<INSTALL_DIR>` represents the absolute path of wherever `botpressTree.exe` (or equivalent,
+depending on operating system) has been installed on your system.
 
 ```bash
+cd <INSTALL_DIR>
 PATHS=/c/foo:/c/bar ./botpressTree.exe frodo sam pippin
 ```
 
@@ -138,3 +171,6 @@ The result is that all of these 5 paths will be evaluated and tracked:
 - <INSTALL_DIR>/frodo
 - <INSTALL_DIR>/sam
 - <INSTALL_DIR>/pippin
+
+Relative paths are resolved into absolute paths. Example: "frodo" becomes
+"C:/botpressTree/frodo" if the <INSTALL_DIR> happens to be "C:/botpressTree".
