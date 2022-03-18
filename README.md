@@ -18,6 +18,28 @@ yarn run package
 
 See `electron-react-boilerplate` [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation)
 
+## Screenshots
+
+Hello, botpressTree!
+
+<img src='docs/img/hello.png'/>
+
+Foo Directory.
+
+<img src='docs/img/foo.png'/>
+
+Frodo Directory. Text wrapping. Many files. Long filenames. Scrollbars.
+
+<img src='docs/img/frodo.png'/>
+
+Status: 404 - Not Found
+
+<img src='docs/img/status-404.png'/>
+
+View: Reload
+
+<img src='docs/img/view-reload.png'/>
+
 ## Explanations -- Key Architectural Choices
 
 **vs-code like file explorer**
@@ -56,6 +78,11 @@ The focus here shall primarily be:
 To fulfil the "in a browser" requirement simultaneously with "is an application",
 I've opted to start with `electron-react-boilerplate`. I assume that it is clear
 to the reader how "electron" technically provides a Chromium-based web browser.
+
+To fulfill the "multiple collapsible sections" requirement, I employed
+`react-bootstrap` [npm page](https://www.npmjs.com/package/react-bootstrap).
+Specifically, I used its `Accordion` component
+[doc/guide here](https://getbootstrap.com/docs/5.0/components/accordion/).
 
 To fulfill the "file explorer" tree-view, I selected `react-folder-tree`
 [npm page](https://www.npmjs.com/package/react-folder-tree).
