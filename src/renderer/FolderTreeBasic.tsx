@@ -6,7 +6,7 @@ import './FolderTreeBasic.css';
 
 export default function FolderTreeBasic(props: { path: string }) {
   const { path } = props;
-  const [tree, setTree] = useState({});
+  const [mainComponent, setMainComponent] = useState(<div />);
 
   const onTreeStateChange = (/* state: any, event: any */) => {
     // no-op --- silently drop the info
@@ -16,10 +16,31 @@ export default function FolderTreeBasic(props: { path: string }) {
     // Setup a reaction
     window.electron.ipcRenderer.on(
       'get-tree',
-      (arg: { root: string; tree: object }) => {
+      (arg: { root: string; tree: object; status: number }) => {
         if (arg.root === path) {
+          // console.log('get-tree result...');
+          // console.log(arg);
           // The message matches this subscriber's context
-          setTree(arg.tree);
+          if (arg.status === 200) {
+            const component = (
+              <FolderTree
+                className="FolderTreeBasic"
+                showCheckbox={false}
+                data={arg.tree}
+                onChange={onTreeStateChange}
+                readOnly
+              />
+            );
+            setMainComponent(component);
+          } else {
+            const component = (
+              <div className="FolderTreeBasic">
+                <p>Status: 404 - Not Found</p>
+              </div>
+            );
+            setMainComponent(component);
+          }
+          // setTree(arg.tree);
         }
       }
     );
@@ -27,15 +48,7 @@ export default function FolderTreeBasic(props: { path: string }) {
     window.electron.ipcRenderer.getTree(path);
   }, [path]);
 
-  return (
-    <FolderTree
-      className="FolderTreeBasic"
-      showCheckbox={false}
-      data={tree}
-      onChange={onTreeStateChange}
-      readOnly
-    />
-  );
+  return mainComponent;
 }
 
 FolderTreeBasic.propTypes = {

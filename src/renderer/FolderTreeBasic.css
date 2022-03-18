@@ -1,4 +1,5 @@
-.FolderTree {
+.FolderTree,
+.FolderTreeBasic {
   color: black;
   padding: 0.5rem;
 }
@@ -8,4 +9,8 @@
 }
 .FolderTreePane .accordion-body {
   padding: 0;
+}
+
+.accordion-button {
+  overflow-wrap: anywhere;
 }

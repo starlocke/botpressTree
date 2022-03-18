@@ -16,6 +16,7 @@ import chokidar from 'chokidar';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
+const fs = require('fs');
 const dirTree = require('directory-tree');
 
 export default class AppUpdater {
@@ -35,9 +36,22 @@ ipcMain.on('ipc-example', async (event, arg) => {
 });
 
 // server-side
-ipcMain.on('get-paths', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `get-paths: ${pingPong}`;
-  event.reply('get-paths', msgTemplate(arg));
+ipcMain.on('get-paths', async (event /* , arg */) => {
+  const allpaths: string[] = [];
+
+  if (typeof process.env.PATHS !== 'undefined') {
+    const envparams = process.env.PATHS.split(';');
+    // For each item, resolve the "absolute path" representation, and add that to "allpaths"
+    envparams.map((p) => allpaths.push(path.resolve(p)));
+  }
+
+  if (process.argv.length > 1) {
+    const params = process.argv.slice(1);
+    // For each item, resolve the "absolute path" representation, and add that to "allpaths"
+    params.map((p) => allpaths.push(path.resolve(p)));
+  }
+
+  event.reply('get-paths', allpaths);
 });
 
 // server-side
@@ -55,21 +69,40 @@ function fix(elem: FixerUpper) {
     elem.children.forEach(fix);
   }
 }
+function getTreeResponse(event, arg) {
+  if (fs.existsSync(arg)) {
+    const dt = dirTree(arg);
+    if (dt) {
+      fix(dt);
+      event.reply('get-tree', { root: arg, tree: dt, status: 200 });
+      return;
+    }
+  }
+  // Fallback: report "not found".
+  event.reply('get-tree', {
+    root: arg,
+    tree: { name: '(does not exist)' },
+    status: 404,
+  });
+}
 ipcMain.on('get-tree', async (event, arg) => {
-  const dt = dirTree(arg);
-  fix(dt);
-  event.reply('get-tree', { root: arg, tree: dt });
-
+  getTreeResponse(event, arg);
   if (!watchedRoots.includes(arg)) {
     watchedRoots.push(arg);
     const watcher = chokidar.watch(arg, {
       persistent: true,
     });
+    watcher.on('error', (error) => {
+      console.log(`Watcher error for ${arg}: ${error}`);
+      getTreeResponse(event, arg);
+      // Always invoke a backup scanner, to handle "clogged up queues/processing"
+      // on the part of the file system. 2500 should be sufficient for modern (SSD)
+      // compute platforms.
+      setTimeout(getTreeResponse, 2500, event, arg);
+    });
     watcher.on('ready', async () => {
       watcher.on('all', (/* watchEvent, watchPath */) => {
-        const dt2 = dirTree(arg);
-        fix(dt2);
-        event.reply('get-tree', { root: arg, tree: dt2 });
+        getTreeResponse(event, arg);
       });
     });
   }
@@ -151,7 +184,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater();
 };
 
 /**
