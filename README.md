@@ -42,7 +42,7 @@ View: Reload
 
 ## Explanations -- Key Architectural Choices
 
-**vs-code like file explorer**
+👉 **vs-code like file explorer**
 
 Okay. So this sounds like the left-most "pane" that many developers will be familiar with.
 
@@ -73,7 +73,7 @@ The focus here shall primarily be:
   component very roughly into place; leaving detailed design considerations
   for other folks to worry about
 
-**key components of proposed solution**
+👉 **key components of proposed solution**
 
 To fulfil the "in a browser" requirement simultaneously with "is an application",
 I've opted to start with `electron-react-boilerplate`. I assume that it is clear
@@ -98,7 +98,7 @@ To bridge the security-context gap, Electon's
 `get-paths` and `get-tree` IPC functions/messages do the work. `chokidar` events
 continuously refresh state, reactively, on the `get-tree` communication channel.
 
-**edge cases**
+👉 **edge cases**
 
 There are two particularly special situations:
 
@@ -130,7 +130,7 @@ circumstances.
 
 The "View -> Reload" (menu) function might also be useful in such cases.
 
-**UX design considerations**
+👉 **UX design considerations**
 
 As stated previously, only very rough "design" choices were supplied for this
 solution. An extremely constrained "300px" height limit is used to keep things
@@ -147,7 +147,7 @@ I be more interested in fine-tuned handling of width / height / overflow concern
 For now, the file explorer component merely "floats" roughly to the left of the
 placeholder "logo + title" section.
 
-**more details in code comments, sparsely**
+👉 **more details in code comments, sparsely**
 
 In a few places within the "newly written code" that I've produced (you can inspect
 `git diff` to figure that out, I trust), there are a few handy comments around
@@ -160,7 +160,7 @@ for the next maintainer. The point here is that such high level documentation
 would be made in a more formal setting. Here, as a "getting a job" pitch, I shall
 refrain from doing so.
 
-**apologies, in advance, to the purists**
+👉 **apologies, in advance, to the purists**
 
 There are some aspects of the code that I would qualify as "awkward". Sorry.
 I'd love to discuss/debate those points in order to imporve on them. For instance:
@@ -168,7 +168,7 @@ I'd love to discuss/debate those points in order to imporve on them. For instanc
 trying to "fix it" following the "if it ain't broken, don't fix it" principle.
 Worth reworking for standardization purposes, but not for functional purposes.
 
-**system requirements**
+👉 **system requirements**
 
 This solution has been developed on Windows 10. In theory, it should work just
 fine on Linux and on MacOS systems, too.
